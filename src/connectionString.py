@@ -57,11 +57,12 @@ class ConnectionString:
                 self.receiveParts["host"] = i[3]
                 self.receiveParts["receiveName"] = i[4]
 
-    def export(self):
-        print(self.sendParts)
-        print(self.receiveParts)
+    def export(self, do_file_export=None):
         while True:
-            choice = int(input("Enter 1 to export to file and 0 to quit:\n"))
+            if do_file_export is None:
+                choice = int(input("Enter 1 to export to file and 0 to quit:\n"))
+            else:
+                choice = do_file_export
             if choice != 0 and choice != 1:
                 continue
             elif choice == 1:
@@ -79,7 +80,13 @@ class ConnectionString:
                 for key in self.receiveParts:
                     f.write(key + "  ->  " + self.receiveParts[key] + "\n")
                 f.close()
-                input("Press any key to quit:\n")
                 sys.exit()
             elif choice == 0:
                 sys.exit()
+
+    def go(self, input_text, do_file_export):
+        self.connectionString = input_text
+        self.split()
+        self.decode_key()
+        self.label()
+        self.export(do_file_export)
