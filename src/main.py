@@ -1,5 +1,5 @@
 # Connection String Decoding
-from connectionString import ConnectionString
+from src.connectionString import ConnectionString
 
 cs = ConnectionString()
 cs.get_string()
