@@ -2,6 +2,7 @@ import re
 from urllib.parse import unquote
 import sys
 from datetime import datetime
+import os
 
 
 class ConnectionString:
@@ -65,6 +66,10 @@ class ConnectionString:
                 continue
             elif choice == 1:
                 now = datetime.now()
+                # Check if the exported Files directory exists and create it if necessary
+                if not os.path.exists("exportedFiles"):
+                    os.mkdir("exportedFiles")
+
                 datetime_string = now.strftime("%d-%m-%Y--%H-%M-%S")
                 f = open("exportedFiles/SortedConnectionString" + datetime_string + ".txt", "w")
                 f.write("SEND PARTS:\n")
@@ -74,6 +79,7 @@ class ConnectionString:
                 for key in self.receiveParts:
                     f.write(key + "  ->  " + self.receiveParts[key] + "\n")
                 f.close()
+                input("Press any key to quit:\n")
                 sys.exit()
             elif choice == 0:
                 sys.exit()
