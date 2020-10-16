@@ -15,10 +15,14 @@ class ConnectionString:
         self.connectionString = input("Enter the string you want to decode:\n")
 
     def split(self):
-        self.connectionString = self.connectionString.replace('{', '').replace('}', '').replace('\"', '').replace("//", '')
+        self.connectionString = self.connectionString\
+            .replace('{', '')\
+            .replace('}', '')\
+            .replace('\"', '')\
+            .replace("//", '')
         self.parts = self.connectionString.split(',')
         for i in range(len(self.parts)):
-            self.parts[i] = re.split('@|/|:', self.parts[i])
+            self.parts[i] = re.split('[@/:]', self.parts[i])
 
         for i in range(len(self.parts)):
             dif = 0
