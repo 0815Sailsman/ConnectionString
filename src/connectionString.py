@@ -1,7 +1,7 @@
 import re
 from urllib.parse import unquote
 import sys
-from datetime import date
+from datetime import datetime
 
 
 class ConnectionString:
@@ -64,9 +64,9 @@ class ConnectionString:
             if choice != 0 and choice != 1:
                 continue
             elif choice == 1:
-                today = date.today()
-                d1 = today.strftime("%d_%m_%Y")
-                f = open("SortedConnectionString" + d1 + ".txt", "w")
+                now = datetime.now()
+                datetime_string = now.strftime("%d-%m-%Y--%H-%M-%S")
+                f = open("exportedFiles/SortedConnectionString" + datetime_string + ".txt", "w")
                 f.write("SEND PARTS:\n")
                 for key in self.sendParts:
                     f.write(key + "  ->  " + self.sendParts[key] + "\n")
