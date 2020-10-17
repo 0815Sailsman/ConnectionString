@@ -1,4 +1,0 @@
-{"queueConnectionString":
-"amqps://SendOnly:SAXQBFk44OGCY6YtQwkEDWe6CYGmRzSuki41LxQLXv4%3d
-@eu-stage-ffdac-device-servicebus.servicebus.windows.net/c9b68be0-8ac4-4e89-b09b-254429051ad6_datapush",
-"topicConnectionString":"amqps://ListenOnly:BqDmrAkE8CUA48vTgGr4ofbXk%2bGj1pXY7frc6%2fgasYc%3d@eu-stage-ffdac-device-servicebus.servicebus.windows.net/c9b68be0-8ac4-4e89-b09b-254429051ad6_DeviceCom/Subscriptions/HL001_17387_280191102001"}
