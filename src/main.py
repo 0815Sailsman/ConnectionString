@@ -7,6 +7,7 @@ import sys
 import os
 
 
+# noinspection PyProtectedMember
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
     try:
@@ -18,162 +19,165 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 
-def pass_input():
-    sendParts, receiveParts = cs.go(e1.get("1.0", END), var1.get(), var2.get())
-    sp_keyname_var.set(sendParts["sendKeyName"])
-    sp_key_var.set(sendParts["sendKey"])
-    sp_host_var.set(sendParts["host"])
-    sp_name_var.set(sendParts["sendName"])
+# noinspection PyAttributeOutsideInit
+class Application(Frame):
+    def __init__(self, master=None):
+        super().__init__(master)
+        self.master = master
 
-    rp_keyname_var.set(receiveParts["receiveKeyName"])
-    rp_key_var.set(receiveParts["receiveKey"])
-    rp_host_var.set(receiveParts["host"])
-    rp_name_var.set(receiveParts["receiveName"])
+        self.cs = ConnectionString()
 
+        self.master.title("ConnectionStringsDecoder")
+        self.master.iconbitmap(resource_path("src/icon.ico"))
+        self.master.geometry("700x600")
 
-def clipboard(master, text):
-    master.clipboard_clear()
-    master.clipboard_append(text)
-    master.update()
+        self.sp_keyname_var = StringVar()
+        self.sp_key_var = StringVar()
+        self.sp_host_var = StringVar()
+        self.sp_name_var = StringVar()
+        self.rp_keyname_var = StringVar()
+        self.rp_key_var = StringVar()
+        self.rp_host_var = StringVar()
+        self.rp_name_var = StringVar()
+
+        self.file_checkbox_var = IntVar(value=1)
+        self.exit_checkbox_var = IntVar(value=0)
+
+        self.create_widgets()
+
+    def create_widgets(self):
+        # Text input label
+        self.input_label = Label(self.master, text="Input: ")
+        self.input_label.grid(row=0)
+        self.input_label.place(x=15, y=25)
+
+        # Text input
+        self.textbox = ScrolledText(self.master)
+        self.textbox.grid(row=0, column=1)
+        self.textbox.place(x=75, y=25, width=550, height=160)
+
+        # SendParts stuff
+        self.sp_title_label = Label(self.master, text="Send Parts: ", font=BOLD)
+        self.sp_title_label.grid(row=0)
+        self.sp_title_label.place(x=15, y=200, width=150)
+
+        self.sp_keyname_button = Button(self.master, text="sendKeyName: ",
+                                        command=lambda: self.clipboard(self.sp_keyname_var.get()))
+        self.sp_keyname_button.grid(row=0)
+        self.sp_keyname_button.place(x=15, y=225, width=150)
+
+        self.sp_keyname_label = Label(self.master, textvariable=self.sp_keyname_var, relief="ridge", anchor="w")
+        self.sp_keyname_label.grid(row=0)
+        self.sp_keyname_label.place(x=165, y=225, width=500)
+
+        self.sp_key_button = Button(self.master, text="sendKey: ",
+                                    command=lambda: self.clipboard(self.sp_key_var.get()))
+        self.sp_key_button.grid(row=0)
+        self.sp_key_button.place(x=15, y=250, width=150)
+
+        self.sp_key_label = Label(self.master, textvariable=self.sp_key_var, relief="ridge", anchor="w")
+        self.sp_key_label.grid(row=0)
+        self.sp_key_label.place(x=165, y=250, width=500)
+
+        self.sp_host_button = Button(self.master, text="Host: ",
+                                     command=lambda: self.clipboard(self.sp_host_var.get()))
+        self.sp_host_button.grid(row=0)
+        self.sp_host_button.place(x=15, y=275, width=150)
+
+        self.sp_host_label = Label(self.master, textvariable=self.sp_host_var, relief="ridge", anchor="w")
+        self.sp_host_label.grid(row=0)
+        self.sp_host_label.place(x=165, y=275, width=500)
+
+        self.sp_name_button = Button(self.master, text="sendName: ",
+                                     command=lambda: self.clipboard(self.sp_name_var.get()))
+        self.sp_name_button.grid(row=0)
+        self.sp_name_button.place(x=15, y=300, width=150)
+
+        self.sp_name_label = Label(self.master, textvariable=self.sp_name_var, relief="ridge", anchor="w")
+        self.sp_name_label.grid(row=0)
+        self.sp_name_label.place(x=165, y=300, width=500)
+
+        # ReceiveParts label
+        self.rp_title_label = Label(self.master, text="Receive Parts: ", font=BOLD)
+        self.rp_title_label.grid(row=0)
+        self.rp_title_label.place(x=15, y=350, width=150)
+
+        self.rp_keyname_button = Button(self.master, text="receiveKeyName: ",
+                                        command=lambda: self.clipboard(self.rp_keyname_var.get()))
+        self.rp_keyname_button.grid(row=0)
+        self.rp_keyname_button.place(x=15, y=375, width=150)
+
+        self.rp_keyname_label = Label(self.master, textvariable=self.rp_keyname_var, relief="ridge", anchor="w")
+        self.rp_keyname_label.grid(row=0)
+        self.rp_keyname_label.place(x=165, y=375, width=500)
+
+        self.rp_key_button = Button(self.master, text="receiveKey: ",
+                                    command=lambda: self.clipboard(self.rp_key_var.get()))
+        self.rp_key_button.grid(row=0)
+        self.rp_key_button.place(x=15, y=400, width=150)
+
+        self.rp_key_label = Label(self.master, textvariable=self.rp_key_var, relief="ridge", anchor="w")
+        self.rp_key_label.grid(row=0)
+        self.rp_key_label.place(x=165, y=400, width=500)
+
+        self.rp_host_button = Button(self.master, text="Host: ",
+                                     command=lambda: self.clipboard(self.rp_host_var.get()))
+        self.rp_host_button.grid(row=0)
+        self.rp_host_button.place(x=15, y=425, width=150)
+
+        self.rp_host_label = Label(self.master, textvariable=self.rp_host_var, relief="ridge", anchor="w")
+        self.rp_host_label.grid(row=0)
+        self.rp_host_label.place(x=165, y=425, width=500)
+
+        self.rp_name_button = Button(self.master, text="receiveName: ",
+                                     command=lambda: self.clipboard(self.rp_name_var.get()))
+        self.rp_name_button.grid(row=0)
+        self.rp_name_button.place(x=15, y=450, width=150)
+
+        self.rp_name_label = Label(self.master, textvariable=self.rp_name_var, relief="ridge", anchor="w")
+        self.rp_name_label.grid(row=0)
+        self.rp_name_label.place(x=165, y=450, width=500)
+
+        # File Export checkbox
+        self.file_checkbox = Checkbutton(self.master, text="Export into file", variable=self.file_checkbox_var)
+        self.file_checkbox.grid(row=1, column=1, sticky=W, pady=4)
+        self.file_checkbox.place(x=40, y=500)
+
+        # Quit checkbox
+        self.exit_checkbox = Checkbutton(self.master, text="Quit after decode", variable=self.exit_checkbox_var)
+        self.exit_checkbox.grid(row=1, column=1, sticky=W, pady=4)
+        self.exit_checkbox.place(x=175, y=500)
+
+        # Decode Button
+        self.decode_button = Button(self.master, text='Decode', command=self.pass_input)
+        self.decode_button.grid(row=3, column=0, sticky=W, pady=4)
+        self.decode_button.place(x=25, y=550, width=150)
+
+        # Quit Button
+        self.quit_button = Button(self.master, text='Quit', command=self.master.quit)
+        self.quit_button.grid(row=3, column=1, sticky=W, pady=4)
+        self.quit_button.place(x=200, y=550, width=150)
+
+    def clipboard(self, text):
+        self.master.clipboard_clear()
+        self.master.clipboard_append(text)
+        self.master.update()
+
+    def pass_input(self):
+        send_parts, receive_parts = self.cs.go(self.textbox.get("1.0", END),
+                                               self.file_checkbox_var.get(), self.exit_checkbox_var.get())
+        self.sp_keyname_var.set(send_parts["sendKeyName"])
+        self.sp_key_var.set(send_parts["sendKey"])
+        self.sp_host_var.set(send_parts["host"])
+        self.sp_name_var.set(send_parts["sendName"])
+
+        self.rp_keyname_var.set(receive_parts["receiveKeyName"])
+        self.rp_key_var.set(receive_parts["receiveKey"])
+        self.rp_host_var.set(receive_parts["host"])
+        self.rp_name_var.set(receive_parts["receiveName"])
 
 
 # General GUI settings
-cs = ConnectionString()
-master = Tk()
-master.title("ConnectionStringsDecoder")
-master.iconbitmap(resource_path("src/icon.ico"))
-master.geometry("700x600")
-
-# Text input label
-input_label = Label(master, text="Input: ")
-input_label.grid(row=0)
-input_label.place(x=15, y=25)
-
-# Text input
-e1 = ScrolledText(master)
-e1.grid(row=0, column=1)
-e1.place(x=75, y=25, width=550, height=160)
-
-# SendParts stuff
-sp_title_label = Label(master, text="Send Parts: ", font=BOLD)
-sp_title_label.grid(row=0)
-sp_title_label.place(x=15, y=200, width=150)
-
-
-sp_keyname_button = Button(master, text="sendKeyName: ", command=lambda: clipboard(master, sp_keyname_var.get()))
-sp_keyname_button.grid(row=0)
-sp_keyname_button.place(x=15, y=225, width=150)
-
-sp_keyname_var = StringVar()
-
-sp_keyname_label = Label(master, textvariable=sp_keyname_var, relief="ridge", anchor="w")
-sp_keyname_label.grid(row=0)
-sp_keyname_label.place(x=165, y=225, width=500)
-
-
-sp_key_button = Button(master, text="sendKey: ", command=lambda: clipboard(master, sp_key_var.get()))
-sp_key_button.grid(row=0)
-sp_key_button.place(x=15, y=250, width=150)
-
-sp_key_var = StringVar()
-
-sp_key_label = Label(master, textvariable=sp_key_var, relief="ridge", anchor="w")
-sp_key_label.grid(row=0)
-sp_key_label.place(x=165, y=250, width=500)
-
-
-sp_host_button = Button(master, text="Host: ", command=lambda: clipboard(master, sp_host_var.get()))
-sp_host_button.grid(row=0)
-sp_host_button.place(x=15, y=275, width=150)
-
-sp_host_var = StringVar()
-
-sp_host_label = Label(master, textvariable=sp_host_var, relief="ridge", anchor="w")
-sp_host_label.grid(row=0)
-sp_host_label.place(x=165, y=275, width=500)
-
-
-sp_name_button = Button(master, text="sendName: ", command=lambda: clipboard(master, sp_name_var.get()))
-sp_name_button.grid(row=0)
-sp_name_button.place(x=15, y=300, width=150)
-
-sp_name_var = StringVar()
-
-sp_name_label = Label(master, textvariable=sp_name_var, relief="ridge", anchor="w")
-sp_name_label.grid(row=0)
-sp_name_label.place(x=165, y=300, width=500)
-
-
-# ReceiveParts label
-rp_title_label = Label(master, text="Receive Parts: ", font=BOLD)
-rp_title_label.grid(row=0)
-rp_title_label.place(x=15, y=350, width=150)
-
-
-rp_keyname_button = Button(master, text="receiveKeyName: ", command=lambda: clipboard(master, rp_keyname_var.get()))
-rp_keyname_button.grid(row=0)
-rp_keyname_button.place(x=15, y=375, width=150)
-
-rp_keyname_var = StringVar()
-
-rp_keyname_label = Label(master, textvariable=rp_keyname_var, relief="ridge", anchor="w")
-rp_keyname_label.grid(row=0)
-rp_keyname_label.place(x=165, y=375, width=500)
-
-
-rp_key_button = Button(master, text="receiveKey: ", command=lambda: clipboard(master, rp_key_var.get()))
-rp_key_button.grid(row=0)
-rp_key_button.place(x=15, y=400, width=150)
-
-rp_key_var = StringVar()
-
-rp_key_label = Label(master, textvariable=rp_key_var, relief="ridge", anchor="w")
-rp_key_label.grid(row=0)
-rp_key_label.place(x=165, y=400, width=500)
-
-
-rp_host_button = Button(master, text="Host: ", command=lambda: clipboard(master, rp_host_var.get()))
-rp_host_button.grid(row=0)
-rp_host_button.place(x=15, y=425, width=150)
-
-rp_host_var = StringVar()
-
-rp_host_label = Label(master, textvariable=rp_host_var, relief="ridge", anchor="w")
-rp_host_label.grid(row=0)
-rp_host_label.place(x=165, y=425, width=500)
-
-
-rp_name_button = Button(master, text="receiveName: ", command=lambda: clipboard(master, rp_name_var.get()))
-rp_name_button.grid(row=0)
-rp_name_button.place(x=15, y=450, width=150)
-
-rp_name_var = StringVar()
-
-rp_name_label = Label(master, textvariable=rp_name_var, relief="ridge", anchor="w")
-rp_name_label.grid(row=0)
-rp_name_label.place(x=165, y=450, width=500)
-
-
-# File Export checkbox
-var1 = IntVar(value=1)
-file_checkbox = Checkbutton(master, text="Export into file", variable=var1)
-file_checkbox.grid(row=1, column=1, sticky=W, pady=4)
-file_checkbox.place(x=40, y=500)
-
-# Quit checkbox
-var2 = IntVar(value=0)
-exit_checkbox = Checkbutton(master, text="Quit after decode", variable=var2)
-exit_checkbox.grid(row=1, column=1, sticky=W, pady=4)
-exit_checkbox.place(x=175, y=500)
-
-# Decode Button
-decode_button = Button(master, text='Decode', command=pass_input)
-decode_button.grid(row=3, column=0, sticky=W, pady=4)
-decode_button.place(x=25, y=550, width=150)
-
-# Quit Button
-quit_button = Button(master, text='Quit', command=master.quit)
-quit_button.grid(row=3, column=1, sticky=W, pady=4)
-quit_button.place(x=200, y=550, width=150)
-
-mainloop()
+root = Tk()
+app = Application(master=root)
+app.mainloop()
