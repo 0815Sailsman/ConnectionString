@@ -18,14 +18,14 @@ def resource_path(relative_path):
 
 
 def pass_input():
-    cs.go(e1.get("1.0", END), var1.get())
+    cs.go(e1.get("1.0", END), var1.get(), var2.get())
 
 
 cs = ConnectionString()
 master = Tk()
 master.title("ConnectionStringsDecoder")
 
-master.iconbitmap(resource_path("icon.ico"))
+master.iconbitmap(resource_path("src/icon.ico"))
 master.geometry("700x300")
 
 input_label = Label(master, text="Input: ")
@@ -40,6 +40,11 @@ var1 = IntVar(value=1)
 file_checkbox = Checkbutton(master, text="Export into file", variable=var1)
 file_checkbox.grid(row=1, column=1, sticky=W, pady=4)
 file_checkbox.place(x=40, y=200)
+
+var2 = IntVar(value=0)
+exit_checkbox = Checkbutton(master, text="Quit after decode", variable=var2)
+exit_checkbox.grid(row=1, column=1, sticky=W, pady=4)
+exit_checkbox.place(x=175, y=200)
 
 decode_button = Button(master, text='Decode', command=pass_input)
 decode_button.grid(row=3, column=0, sticky=W, pady=4)

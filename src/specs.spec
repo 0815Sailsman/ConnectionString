@@ -3,10 +3,10 @@
 block_cipher = None
 
 
-a = Analysis(['ConnectionStringsDebugger.py'],
+a = Analysis(['main.py'],
              pathex=['C:\\Users\\danielg\\PycharmProjects\\ConnectionString\\src'],
              binaries=[],
-             datas=[('C:\\Users\\danielg\\PycharmProjects\\ConnectionString\\src\\icon.ico', '.')],
+             datas=[('C:\\Users\\danielg\\PycharmProjects\\ConnectionString\\src\\icon.ico', '/src/')],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
@@ -23,7 +23,7 @@ exe = EXE(pyz,
           a.zipfiles,
           a.datas,
           [],
-          name='ConnectionStringsDebugger',
+          name='ConnectionStringsDecoder',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,

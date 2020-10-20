@@ -57,36 +57,28 @@ class ConnectionString:
                 self.receiveParts["host"] = i[3]
                 self.receiveParts["receiveName"] = i[4]
 
-    def export(self, do_file_export=None):
-        while True:
-            if do_file_export is None:
-                choice = int(input("Enter 1 to export to file and 0 to quit:\n"))
-            else:
-                choice = do_file_export
-            if choice != 0 and choice != 1:
-                continue
-            elif choice == 1:
-                now = datetime.now()
-                # Check if the exported Files directory exists and create it if necessary
-                if not os.path.exists("exportedFiles"):
-                    os.mkdir("exportedFiles")
+    def export(self, do_file_export=1, do_quit=0):
+        if do_file_export == 1:
+            now = datetime.now()
+            # Check if the exported Files directory exists and create it if necessary
+            if not os.path.exists("exportedFiles"):
+                os.mkdir("exportedFiles")
 
-                datetime_string = now.strftime("%d-%m-%Y--%H-%M-%S")
-                f = open("exportedFiles/SortedConnectionString" + datetime_string + ".txt", "w")
-                f.write("SEND PARTS:\n")
-                for key in self.sendParts:
-                    f.write(key + "  ->  " + self.sendParts[key] + "\n")
-                f.write("\n\nRECEIVE PARTS:\n")
-                for key in self.receiveParts:
-                    f.write(key + "  ->  " + self.receiveParts[key] + "\n")
-                f.close()
-                sys.exit()
-            elif choice == 0:
-                sys.exit()
+            datetime_string = now.strftime("%d-%m-%Y--%H-%M-%S")
+            f = open("exportedFiles/SortedConnectionString" + datetime_string + ".txt", "w")
+            f.write("SEND PARTS:\n")
+            for key in self.sendParts:
+                f.write(key + "  ->  " + self.sendParts[key] + "\n")
+            f.write("\n\nRECEIVE PARTS:\n")
+            for key in self.receiveParts:
+                f.write(key + "  ->  " + self.receiveParts[key] + "\n")
+            f.close()
+        if do_quit == 1:
+            sys.exit()
 
-    def go(self, input_text, do_file_export):
+    def go(self, input_text, do_file_export, do_quit):
         self.connectionString = input_text
         self.split()
         self.decode_key()
         self.label()
-        self.export(do_file_export)
+        self.export(do_file_export, do_quit)
