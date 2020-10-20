@@ -28,7 +28,7 @@ class Application(Frame):
         self.cs = ConnectionString()
 
         self.master.title("ConnectionStringsDecoder")
-        self.master.iconbitmap(resource_path("src/icon.ico"))
+        self.master.iconbitmap(resource_path("icon.ico"))
         self.master.geometry("700x600")
 
         self.sp_keyname_var = StringVar()
