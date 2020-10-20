@@ -82,3 +82,4 @@ class ConnectionString:
         self.decode_key()
         self.label()
         self.export(do_file_export, do_quit)
+        return self.sendParts, self.receiveParts
