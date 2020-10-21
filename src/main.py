@@ -40,7 +40,8 @@ class Application(Frame):
         self.rp_host_var = StringVar()
         self.rp_name_var = StringVar()
 
-        self.file_checkbox_var = IntVar(value=1)
+        self.txt_file_checkbox_var = IntVar(value=1)
+        self.xml_file_checkbox_var = IntVar(value=0)
         self.exit_checkbox_var = IntVar(value=0)
 
         self.create_widgets()
@@ -138,15 +139,20 @@ class Application(Frame):
         self.rp_name_label.grid(row=0)
         self.rp_name_label.place(x=165, y=450, width=500)
 
-        # File Export checkbox
-        self.file_checkbox = Checkbutton(self.master, text="Export into file", variable=self.file_checkbox_var)
+        # File Export .txt checkbox
+        self.file_checkbox = Checkbutton(self.master, text="Export into txt-file", variable=self.txt_file_checkbox_var)
         self.file_checkbox.grid(row=1, column=1, sticky=W, pady=4)
         self.file_checkbox.place(x=40, y=500)
+
+        # File Export .xml checkbox
+        self.file_checkbox = Checkbutton(self.master, text="Export into xml-file", variable=self.xml_file_checkbox_var)
+        self.file_checkbox.grid(row=1, column=2, sticky=W, pady=4)
+        self.file_checkbox.place(x=175, y=500)
 
         # Quit checkbox
         self.exit_checkbox = Checkbutton(self.master, text="Quit after decode", variable=self.exit_checkbox_var)
         self.exit_checkbox.grid(row=1, column=1, sticky=W, pady=4)
-        self.exit_checkbox.place(x=175, y=500)
+        self.exit_checkbox.place(x=325, y=500)
 
         # Decode Button
         self.decode_button = Button(self.master, text='Decode', command=self.pass_input)
@@ -165,7 +171,8 @@ class Application(Frame):
 
     def pass_input(self):
         send_parts, receive_parts = self.cs.go(self.textbox.get("1.0", END),
-                                               self.file_checkbox_var.get(), self.exit_checkbox_var.get())
+                                               self.txt_file_checkbox_var.get(), self.xml_file_checkbox_var.get(),
+                                               self.exit_checkbox_var.get())
         self.sp_keyname_var.set(send_parts["sendKeyName"])
         self.sp_key_var.set(send_parts["sendKey"])
         self.sp_host_var.set(send_parts["host"])

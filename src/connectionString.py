@@ -4,6 +4,7 @@ import sys
 from datetime import datetime
 import os
 import json
+import dicttoxml
 
 
 class ConnectionString:
@@ -50,9 +51,10 @@ class ConnectionString:
         self.receiveParts["receiveName"] = self.parts[1][3]
 
     # This method exports the sorted values into a txt-file if the user wants this and may terminate the application.
-    def export(self, do_file_export=1, do_quit=0):
-        # If the checkbox for file-exports is ticked
-        if do_file_export == 1:
+    def export(self, do_txt_file_export=1, do_xml_file_export=0, do_quit=0):
+
+        # If either one is ticked
+        if do_txt_file_export == 1 or do_xml_file_export == 1:
 
             # Check if the exported Files directory exists and create it if necessary
             if not os.path.exists("exportedFiles"):
@@ -62,25 +64,40 @@ class ConnectionString:
             now = datetime.now()
             datetime_string = now.strftime("%d-%m-%Y--%H-%M-%S")
 
-            # Creates a txt-file named with the datetime and opens it in write-mode.
-            f = open("exportedFiles/SortedConnectionString" + datetime_string + ".txt", "w")
+            # If the checkbox for txt-file-exports is ticked
+            if do_txt_file_export == 1:
 
-            # Writes every value with its key into the text file and flushes the data instantly.
-            f.write("SEND PARTS:\n")
-            for key in self.sendParts:
-                f.write(key + "  ->  " + self.sendParts[key] + "\n")
-            f.write("\n\nRECEIVE PARTS:\n")
-            for key in self.receiveParts:
-                f.write(key + "  ->  " + self.receiveParts[key] + "\n")
-            f.close()
+                # Creates a file named with the datetime and opens it in write-mode.
+                f = open("exportedFiles/SortedConnectionString" + datetime_string + ".txt", "w")
+
+                # Writes every value with its key into the text file and flushes the data instantly.
+                f.write("SEND PARTS:\n")
+                for key in self.sendParts:
+                    f.write(key + "  ->  " + self.sendParts[key] + "\n")
+                f.write("\n\nRECEIVE PARTS:\n")
+                for key in self.receiveParts:
+                    f.write(key + "  ->  " + self.receiveParts[key] + "\n")
+                f.close()
+
+            # If the checkbox for xml-file-exports is ticked
+            if do_xml_file_export == 1:
+
+                # Creates a file named with the datetime and opens it in write-mode.
+                f = open("exportedFiles/SortedConnectionString" + datetime_string + ".xml", "w")
+
+                all_parts = {**self.sendParts, **self.receiveParts}
+                xml = dicttoxml.dicttoxml(all_parts)
+                f.write(xml.decode())
+
+                f.close()
 
         # If the checkbox for quit after-decode is ticked
         if do_quit == 1:
             sys.exit()
 
     # This is the go-to method called by the GUI to start the whole process.
-    def go(self, input_text, do_file_export, do_quit):
+    def go(self, input_text, do_txt_file_export, do_xml_file_export, do_quit):
         self.connectionString = input_text
         self.json_decode()
-        self.export(do_file_export, do_quit)
+        self.export(do_txt_file_export, do_xml_file_export, do_quit)
         return self.sendParts, self.receiveParts
